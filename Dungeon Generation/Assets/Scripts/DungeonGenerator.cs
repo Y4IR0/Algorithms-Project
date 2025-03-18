@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using NaughtyAttributes;
+using UnityEngine.UIElements;
 
 public class DungeonGenerator : MonoBehaviour
 {
     new List<RectInt> rooms = new List<RectInt>();
+    new List<RectInt> doors = new List<RectInt>(); 
+    
     new List<RectInt> splittableRooms = new List<RectInt>();
  
     [SerializeField] RectInt boundary = new RectInt(0, 0, 200, 200);
     [SerializeField] RectInt minRoomRect = new RectInt(0, 0, 10, 10);
-    //[SerializeField] int wallThickness = 2;
+    [SerializeField] int wallThickness = 2;
 
 
 
@@ -26,7 +29,37 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    void SplitRoom(RectInt room, bool splitHorizontally)
+    void DrawDoors()
+    {
+        for (int i = 0; i < doors.Count; i++)
+        {
+            RectInt room = doors[i];
+            AlgorithmsUtils.DebugRectInt(room, Color.cyan, 100000, false, .03f * i);
+        }
+    }
+
+    void Awake()
+    {
+        GenerateRooms();
+        GenerateDoors();
+    }
+
+    //[Button("Generate Rooms")]
+    void GenerateRooms()
+    {
+        SplitRoom(boundary, Random.Range(0, 1) == 1);
+
+        int amount = 0;
+        while (splittableRooms.Count > 0 && amount < 10000)
+        {
+            amount++;
+            SplitRoom(splittableRooms[0], Random.Range(0, 2) == 1);
+        }
+        
+        
+        
+        
+        void SplitRoom(RectInt room, bool splitHorizontally)
     {
         RectInt room1;
         RectInt room2;
@@ -93,27 +126,117 @@ public class DungeonGenerator : MonoBehaviour
             rooms.Remove(room);
         }
     }
-
-    void Awake()
-    {
-        GenerateRooms();
-    }
-
-    [Button("Generate Rooms")]
-    void GenerateRooms()
-    {
-        SplitRoom(boundary, Random.Range(0, 1) == 1);
-
-        int amount = 0;
-        while (splittableRooms.Count > 0 && amount < 10000)
-        {
-            amount++;
-            SplitRoom(splittableRooms[0], Random.Range(0, 2) == 1);
-        }
         
 
         DrawRooms();
     }
+
+    void GenerateDoors()
+    {
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            RectInt targetRoom = rooms[i];
+            
+            for (int ii = 0; ii < rooms.Count; ii++)
+            {
+                RectInt neighborRoom = rooms[ii];
+                
+                // Creating variables
+                int doorWidth = 3;
+
+                int x;
+                int y;
+                int width;
+                int height;
+                RectInt door;
+                
+                
+                // Checking left side
+                RectInt leftWall = new RectInt(targetRoom.x - wallThickness/2, targetRoom.y, wallThickness, targetRoom.height);
+                bool leftIntersects = AlgorithmsUtils.Intersects(neighborRoom, leftWall);
+
+                if (leftIntersects)
+                {
+                    x = leftWall.x;
+                    y = Random.Range(doorWidth, leftWall.height - doorWidth);
+                    width = wallThickness;
+                    height = doorWidth;
+                            
+                    door = new RectInt(x, y, width, height);
+                    doors.Add(door); 
+                }
+                
+                /*
+                RectInt room2 = new RectInt(neighborRoom.x - 2, neighborRoom.y - 2, neighborRoom.width + 2, neighborRoom.height + 2);
+                
+                bool intersects = AlgorithmsUtils.Intersects(biggerNeighborRoom, room2);
+
+                if (intersects && targetRoom != neighborRoom) // Make new door
+                {
+                    Vector2 targetRoomPosition = new Vector2(targetRoom.x, targetRoom.y);
+                    Vector2 neighborRoomPosition = new Vector2(neighborRoom.x, neighborRoom.y);
+                    Vector2 direction = (neighborRoomPosition - targetRoomPosition).normalized;
+                    
+                    int doorWidth = 3;
+
+                    int x;
+                    int y;
+                    int width;
+                    int height;
+                    RectInt door;
+                    
+                    Debug.Log(direction);
+                    
+                    switch (direction)
+                    {
+                        case var value when value == Vector2.left:
+                            x = targetRoom.x - wallThickness / 2;
+                            y = Random.Range(doorWidth, targetRoom.height - doorWidth);
+                            width = wallThickness;
+                            height = doorWidth;
+                            
+                            door = new RectInt(x, y, width, height);
+                            doors.Add(door);
+                            break;
+                        
+                        case var value when value ==  Vector2.right:
+                            x = targetRoom.x - wallThickness/2 + targetRoom.width;
+                            y = Random.Range(doorWidth, targetRoom.height - doorWidth);
+                            width = wallThickness;
+                            height = doorWidth;
+                            
+                            door = new RectInt(x, y, width, height);
+                            doors.Add(door);
+                            break;
+                        
+                        case var value when value ==  Vector2.up:
+                            x = Random.Range(doorWidth, targetRoom.width - doorWidth);
+                            y = targetRoom.y - wallThickness/2 + targetRoom.height;
+                            width = doorWidth;
+                            height = wallThickness;
+                            
+                            door = new RectInt(x, y, width, height);
+                            doors.Add(door);
+                            break;
+                        
+                        case var value when value ==  Vector2.down:
+                            x = Random.Range(doorWidth, targetRoom.width - doorWidth);
+                            y = targetRoom.y - wallThickness/2;
+                            width = doorWidth;
+                            height = wallThickness;
+                            
+                            door = new RectInt(x, y, width, height);
+                            doors.Add(door);
+                            break;
+                    }
+                }
+                */
+            }
+        }
+
+        DrawDoors();
+    }
+    
 }
 
 /*
