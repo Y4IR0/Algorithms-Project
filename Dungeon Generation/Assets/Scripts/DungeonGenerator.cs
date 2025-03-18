@@ -141,6 +141,8 @@ public class DungeonGenerator : MonoBehaviour
             {
                 RectInt neighborRoom = rooms[ii];
                 
+                if (neighborRoom == targetRoom) continue;
+                
                 // Creating variables
                 int doorWidth = 3;
 
@@ -153,14 +155,30 @@ public class DungeonGenerator : MonoBehaviour
                 
                 // Checking left side
                 RectInt leftWall = new RectInt(targetRoom.x - wallThickness/2, targetRoom.y, wallThickness, targetRoom.height);
-                bool leftIntersects = AlgorithmsUtils.Intersects(neighborRoom, leftWall);
+                RectInt leftIntersection = AlgorithmsUtils.Intersect(neighborRoom, leftWall);
 
-                if (leftIntersects)
+                if (leftIntersection != RectInt.zero)
                 {
-                    x = leftWall.x;
-                    y = Random.Range(doorWidth, leftWall.height - doorWidth);
+                    x = leftIntersection.x;
+                    y = leftIntersection.y + Random.Range(doorWidth, leftIntersection.height - doorWidth);
                     width = wallThickness;
                     height = doorWidth;
+                            
+                    door = new RectInt(x, y, width, height);
+                    doors.Add(door); 
+                }
+                
+                
+                // Checking bottom side
+                RectInt bottomWall = new RectInt(targetRoom.x, targetRoom.y - wallThickness/2, targetRoom.width, wallThickness);
+                RectInt bottomIntersection = AlgorithmsUtils.Intersect(neighborRoom, bottomWall);
+
+                if (bottomIntersection != RectInt.zero)
+                {
+                    x = bottomIntersection.x + Random.Range(doorWidth, bottomIntersection.width - doorWidth);
+                    y = bottomIntersection.y;
+                    width = doorWidth;
+                    height = wallThickness;
                             
                     door = new RectInt(x, y, width, height);
                     doors.Add(door); 
