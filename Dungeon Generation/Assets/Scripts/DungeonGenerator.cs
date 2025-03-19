@@ -62,7 +62,7 @@ public class DungeonGenerator : MonoBehaviour
         RectInt room1;
         RectInt room2;
 
-        float room1Divider = Random.Range(3, 7) * .1f;
+        float room1Divider = Random.Range(4, 6) * .1f;
         float room2Divider = 1 - room1Divider;
         
         
