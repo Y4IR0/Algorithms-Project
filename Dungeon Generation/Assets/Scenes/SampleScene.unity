@@ -171,8 +171,9 @@ MonoBehaviour:
   minRoomRect:
     x: 0
     y: 0
-    width: 10
-    height: 10
+    width: 15
+    height: 15
+  wallThickness: 2
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

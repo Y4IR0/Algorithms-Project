@@ -157,10 +157,10 @@ public class DungeonGenerator : MonoBehaviour
                 RectInt leftWall = new RectInt(targetRoom.x - wallThickness/2, targetRoom.y, wallThickness, targetRoom.height);
                 RectInt leftIntersection = AlgorithmsUtils.Intersect(neighborRoom, leftWall);
 
-                if (leftIntersection != RectInt.zero)
+                if (leftIntersection != RectInt.zero && leftIntersection.height > doorWidth * 4)
                 {
                     x = leftIntersection.x;
-                    y = leftIntersection.y + Random.Range(doorWidth, leftIntersection.height - doorWidth);
+                    y = leftIntersection.y + Random.Range(doorWidth * 2, leftIntersection.height - doorWidth * 2);
                     width = wallThickness;
                     height = doorWidth;
                             
@@ -173,15 +173,15 @@ public class DungeonGenerator : MonoBehaviour
                 RectInt bottomWall = new RectInt(targetRoom.x, targetRoom.y - wallThickness/2, targetRoom.width, wallThickness);
                 RectInt bottomIntersection = AlgorithmsUtils.Intersect(neighborRoom, bottomWall);
 
-                if (bottomIntersection != RectInt.zero)
+                if (bottomIntersection != RectInt.zero && bottomIntersection.width > doorWidth * 4)
                 {
-                    x = bottomIntersection.x + Random.Range(doorWidth, bottomIntersection.width - doorWidth);
+                    x = bottomIntersection.x + Random.Range(doorWidth * 2, bottomIntersection.width - doorWidth * 2);
                     y = bottomIntersection.y;
                     width = doorWidth;
                     height = wallThickness;
                             
                     door = new RectInt(x, y, width, height);
-                    doors.Add(door); 
+                    doors.Add(door);
                 }
                 
                 /*
