@@ -55,10 +55,8 @@ public class DungeonGenerator : MonoBehaviour
             amount++;
             SplitRoom(splittableRooms[0], Random.Range(0, 2) == 1);
         }
-        
-        
-        
-        
+
+
         void SplitRoom(RectInt room, bool splitHorizontally)
     {
         RectInt room1;
@@ -81,7 +79,7 @@ public class DungeonGenerator : MonoBehaviour
             else                        // Odd
             {
                 room1Height = Mathf.RoundToInt(room.height * room1Divider);
-                room2Height = Mathf.RoundToInt(room.height * room2Divider + .49999f);
+                room2Height = Mathf.RoundToInt(room.height * room2Divider-1); //+1
             }
             
             room1 = new RectInt(room.x, room.y + room2Height, room.width, room1Height);
@@ -100,7 +98,7 @@ public class DungeonGenerator : MonoBehaviour
             else                        // Odd
             {
                 room1Width = Mathf.RoundToInt(room.width * room1Divider);
-                room2Width = Mathf.RoundToInt(room.width * room2Divider + .49999f);
+                room2Width = Mathf.RoundToInt(room.width * room2Divider-1); //+1
             }
             
             room1 = new RectInt(room.x, room.y, room1Width, room.height);
