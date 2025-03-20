@@ -40,6 +40,21 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    void DrawGraph()
+    {
+        foreach (RectInt room in dungeon.GetNodes())
+        {
+            Vector3 roomPos = new Vector3(room.x + room.width / 2, 0, room.y + room.height / 2);
+            DebugExtension.DebugCircle(roomPos, Color.green, 3, 100000, false);
+
+            foreach (RectInt neighbor in dungeon.GetNeighbors(room))
+            {
+                Vector3 neighborPos = new Vector3(neighbor.x + neighbor.width / 2, 0, neighbor.y + neighbor.height / 2);
+                Debug.DrawLine(roomPos, neighborPos, Color.green, 100000, false);
+            }
+        }
+    }
+
     void Awake()
     {
         GenerateRooms();
@@ -219,7 +234,7 @@ public class DungeonGenerator : MonoBehaviour
                 dungeon.AddEdge(room1, room2); // Adds connection to dungeon graph
         }
         
-        dungeon.PrintGraph();
+        DrawGraph();
     }
     
 }

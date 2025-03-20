@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 1007
   m_ShowMode: 4
-  m_Title: Inspector
+  m_Title: Hierarchy
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 21
+  controlID: 90
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectBrowser
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -221,14 +221,14 @@ MonoBehaviour:
     y: 702
     width: 1183
     height: 249
-  m_MinSize: {x: 232, y: 276}
-  m_MaxSize: {x: 10002, y: 10026}
-  m_ActualView: {fileID: 15}
+  m_MinSize: {x: 102, y: 126}
+  m_MaxSize: {x: 4002, y: 4026}
+  m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 15}
   - {fileID: 16}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -931,7 +931,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: 135.1496, y: 64.992195, z: 138.80873}
     speed: 2
-    m_Value: {x: 7.043584, y: 49.890778, z: 49.70314}
+    m_Value: {x: 135.1496, y: 64.992195, z: 138.80873}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -979,11 +979,11 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: -0.56446886, y: 0.009929841, z: -0.005615379, w: -0.8255547}
     speed: 2
-    m_Value: {x: -0.6925482, y: -0.036516465, z: 0.036508515, w: -0.719707}
+    m_Value: {x: -0.56446886, y: 0.00992984, z: -0.005615379, w: -0.8255547}
   m_Size:
     m_Target: 0.0041746283
     speed: 2
-    m_Value: 0.0032056791
+    m_Value: 0.0041746283
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1189,8 +1189,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1
-    y: 726
+    x: 369
+    y: 781
     width: 1181
     height: 223
   m_SerializedDataModeController:
@@ -1289,8 +1289,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: 42a60000
+    m_LastClickedInstanceID: 42562
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c623000000000000
     m_RenameOverlay:
@@ -1342,8 +1342,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Console\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 369
-    y: 781
+    x: 1
+    y: 726
     width: 1181
     height: 223
   m_SerializedDataModeController:
