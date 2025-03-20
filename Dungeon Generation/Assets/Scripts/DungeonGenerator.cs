@@ -7,6 +7,8 @@ using UnityEngine.UIElements;
 
 public class DungeonGenerator : MonoBehaviour
 {
+    new Graph<RectInt> dungeon = new Graph<RectInt>();
+    
     new List<RectInt> rooms = new List<RectInt>();
     new List<RectInt> doors = new List<RectInt>(); 
     
@@ -42,6 +44,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         GenerateRooms();
         GenerateDoors();
+        GenerateDungeonGraph();
     }
 
     //[Button("Generate Rooms")]
@@ -164,6 +167,7 @@ public class DungeonGenerator : MonoBehaviour
                             
                     door = new RectInt(x, y, width, height);
                     doors.Add(door); 
+                    //dungeon.AddEdge(targetRoom, neighborRoom); // Adds connection to dungeon graph
                 }
                 
                 
@@ -180,80 +184,60 @@ public class DungeonGenerator : MonoBehaviour
                             
                     door = new RectInt(x, y, width, height);
                     doors.Add(door);
+                    //dungeon.AddEdge(targetRoom, neighborRoom); // Adds connection to dungeon graph
                 }
-                
-                /*
-                RectInt room2 = new RectInt(neighborRoom.x - 2, neighborRoom.y - 2, neighborRoom.width + 2, neighborRoom.height + 2);
-                
-                bool intersects = AlgorithmsUtils.Intersects(biggerNeighborRoom, room2);
-
-                if (intersects && targetRoom != neighborRoom) // Make new door
-                {
-                    Vector2 targetRoomPosition = new Vector2(targetRoom.x, targetRoom.y);
-                    Vector2 neighborRoomPosition = new Vector2(neighborRoom.x, neighborRoom.y);
-                    Vector2 direction = (neighborRoomPosition - targetRoomPosition).normalized;
-                    
-                    int doorWidth = 3;
-
-                    int x;
-                    int y;
-                    int width;
-                    int height;
-                    RectInt door;
-                    
-                    Debug.Log(direction);
-                    
-                    switch (direction)
-                    {
-                        case var value when value == Vector2.left:
-                            x = targetRoom.x - wallThickness / 2;
-                            y = Random.Range(doorWidth, targetRoom.height - doorWidth);
-                            width = wallThickness;
-                            height = doorWidth;
-                            
-                            door = new RectInt(x, y, width, height);
-                            doors.Add(door);
-                            break;
-                        
-                        case var value when value ==  Vector2.right:
-                            x = targetRoom.x - wallThickness/2 + targetRoom.width;
-                            y = Random.Range(doorWidth, targetRoom.height - doorWidth);
-                            width = wallThickness;
-                            height = doorWidth;
-                            
-                            door = new RectInt(x, y, width, height);
-                            doors.Add(door);
-                            break;
-                        
-                        case var value when value ==  Vector2.up:
-                            x = Random.Range(doorWidth, targetRoom.width - doorWidth);
-                            y = targetRoom.y - wallThickness/2 + targetRoom.height;
-                            width = doorWidth;
-                            height = wallThickness;
-                            
-                            door = new RectInt(x, y, width, height);
-                            doors.Add(door);
-                            break;
-                        
-                        case var value when value ==  Vector2.down:
-                            x = Random.Range(doorWidth, targetRoom.width - doorWidth);
-                            y = targetRoom.y - wallThickness/2;
-                            width = doorWidth;
-                            height = wallThickness;
-                            
-                            door = new RectInt(x, y, width, height);
-                            doors.Add(door);
-                            break;
-                    }
-                }
-                */
             }
         }
 
         DrawDoors();
     }
     
+    void GenerateDungeonGraph()
+    {
+        for (int i = 0; i < doors.Count; i++)
+        {
+            RectInt door = doors[i];
+            
+            RectInt room1 = RectInt.zero;
+            RectInt room2 = RectInt.zero;
+
+            for (int ii = 0; ii < rooms.Count; ii++)
+            {
+                RectInt currentRoom = rooms[ii];
+                bool intersects = AlgorithmsUtils.Intersects(door, currentRoom);
+
+                if (intersects)
+                {
+                    if (room1 == RectInt.zero)
+                        room1 = currentRoom;
+                    else
+                        room2 = currentRoom;
+                }
+            }
+            
+            if (room1 != RectInt.zero && room2 != RectInt.zero)
+                dungeon.AddEdge(room1, room2); // Adds connection to dungeon graph
+        }
+        
+        dungeon.PrintGraph();
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 new List<RectInt> rooms = new List<RectInt>();
@@ -384,3 +368,84 @@ new List<RectInt> rooms = new List<RectInt>();
         DrawRooms();
     }
  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ // Generate Doors
+ 
+                RectInt room2 = new RectInt(neighborRoom.x - 2, neighborRoom.y - 2, neighborRoom.width + 2, neighborRoom.height + 2);
+                
+                bool intersects = AlgorithmsUtils.Intersects(biggerNeighborRoom, room2);
+
+                if (intersects && targetRoom != neighborRoom) // Make new door
+                {
+                    Vector2 targetRoomPosition = new Vector2(targetRoom.x, targetRoom.y);
+                    Vector2 neighborRoomPosition = new Vector2(neighborRoom.x, neighborRoom.y);
+                    Vector2 direction = (neighborRoomPosition - targetRoomPosition).normalized;
+                    
+                    int doorWidth = 3;
+
+                    int x;
+                    int y;
+                    int width;
+                    int height;
+                    RectInt door;
+                    
+                    Debug.Log(direction);
+                    
+                    switch (direction)
+                    {
+                        case var value when value == Vector2.left:
+                            x = targetRoom.x - wallThickness / 2;
+                            y = Random.Range(doorWidth, targetRoom.height - doorWidth);
+                            width = wallThickness;
+                            height = doorWidth;
+                            
+                            door = new RectInt(x, y, width, height);
+                            doors.Add(door);
+                            break;
+                        
+                        case var value when value ==  Vector2.right:
+                            x = targetRoom.x - wallThickness/2 + targetRoom.width;
+                            y = Random.Range(doorWidth, targetRoom.height - doorWidth);
+                            width = wallThickness;
+                            height = doorWidth;
+                            
+                            door = new RectInt(x, y, width, height);
+                            doors.Add(door);
+                            break;
+                        
+                        case var value when value ==  Vector2.up:
+                            x = Random.Range(doorWidth, targetRoom.width - doorWidth);
+                            y = targetRoom.y - wallThickness/2 + targetRoom.height;
+                            width = doorWidth;
+                            height = wallThickness;
+                            
+                            door = new RectInt(x, y, width, height);
+                            doors.Add(door);
+                            break;
+                        
+                        case var value when value ==  Vector2.down:
+                            x = Random.Range(doorWidth, targetRoom.width - doorWidth);
+                            y = targetRoom.y - wallThickness/2;
+                            width = doorWidth;
+                            height = wallThickness;
+                            
+                            door = new RectInt(x, y, width, height);
+                            doors.Add(door);
+                            break;
+                    }
+                }
+                */
