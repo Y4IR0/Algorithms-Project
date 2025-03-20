@@ -234,6 +234,13 @@ public class DungeonGenerator : MonoBehaviour
                 dungeon.AddEdge(room1, room2); // Adds connection to dungeon graph
         }
         
+        if (dungeon.GetNodeCount() == rooms.Count)
+            Debug.Log("All rooms are connected! " + dungeon.GetNodeCount() + "/" +  rooms.Count);
+        else
+        {
+            Debug.Log("Not all rooms are connected! " + dungeon.GetNodeCount() + "/" +  rooms.Count);
+        }
+        
         DrawGraph();
     }
     
