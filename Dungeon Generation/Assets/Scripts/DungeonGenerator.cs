@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Unity.Mathematics;
+using Random = Unity.Mathematics.Random;
 using NaughtyAttributes;
 using UnityEngine.UIElements;
 
 public class DungeonGenerator : MonoBehaviour
 {
+    Random rng;
+    
     new Graph<RectInt> dungeon = new Graph<RectInt>();
     
     new List<RectInt> rooms = new List<RectInt>();
@@ -17,6 +20,12 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] RectInt boundary = new RectInt(0, 0, 200, 200);
     [SerializeField] RectInt minRoomRect = new RectInt(0, 0, 10, 10);
     [SerializeField] int wallThickness = 2;
+
+    [Header("Seed")]
+    [SerializeField] int seed;
+
+    [Header("Animation")]
+    [SerializeField] bool isAnimated = true;
 
 
 
@@ -57,6 +66,8 @@ public class DungeonGenerator : MonoBehaviour
 
     void Awake()
     {
+        rng = new Random(Convert.ToUInt32(seed));
+        
         GenerateRooms();
         GenerateDoors();
         GenerateDungeonGraph();
@@ -65,13 +76,13 @@ public class DungeonGenerator : MonoBehaviour
     //[Button("Generate Rooms")]
     void GenerateRooms()
     {
-        SplitRoom(boundary, Random.Range(0, 1) == 1);
+        SplitRoom(boundary, rng.NextBool());
 
         int amount = 0;
         while (splittableRooms.Count > 0 && amount < 10000)
         {
             amount++;
-            SplitRoom(splittableRooms[0], Random.Range(0, 2) == 1);
+            SplitRoom(splittableRooms[0], rng.NextBool());
         }
 
 
@@ -80,7 +91,7 @@ public class DungeonGenerator : MonoBehaviour
         RectInt room1;
         RectInt room2;
 
-        float room1Divider = Random.Range(4, 6) * .1f;
+        float room1Divider = rng.NextInt(4, 6) * .1f;
         float room2Divider = 1 - room1Divider;
         
         
@@ -176,7 +187,7 @@ public class DungeonGenerator : MonoBehaviour
                 if (leftIntersection != RectInt.zero && leftIntersection.height > doorWidth * 4)
                 {
                     x = leftIntersection.x;
-                    y = leftIntersection.y + Random.Range(doorWidth * 2, leftIntersection.height - doorWidth * 2);
+                    y = leftIntersection.y + rng.NextInt(doorWidth * 2, leftIntersection.height - doorWidth * 2);
                     width = wallThickness;
                     height = doorWidth;
                             
@@ -192,7 +203,7 @@ public class DungeonGenerator : MonoBehaviour
 
                 if (bottomIntersection != RectInt.zero && bottomIntersection.width > doorWidth * 4)
                 {
-                    x = bottomIntersection.x + Random.Range(doorWidth * 2, bottomIntersection.width - doorWidth * 2);
+                    x = bottomIntersection.x + rng.NextInt(doorWidth * 2, bottomIntersection.width - doorWidth * 2);
                     y = bottomIntersection.y;
                     width = doorWidth;
                     height = wallThickness;
