@@ -39,7 +39,20 @@ public class DungeonGenerator : MonoBehaviour
         for (int i = 0; i < rooms.Count; i++)
         {
             RectInt room = rooms[i];
-            AlgorithmsUtils.DebugRectInt(room, Color.yellow, Time.deltaTime, false, .03f * i);
+            AlgorithmsUtils.DebugRectInt(room, Color.red, Time.deltaTime, false, 0);
+
+            if (showWalls)
+            {
+                RectInt wallLeft = new RectInt(room.x, room.y, wallThickness/2, room.height);
+                RectInt WallTop = new RectInt(room.x, room.y + room.height - wallThickness/2, room.width, wallThickness/2);
+                RectInt WallRight = new RectInt(room.x + room.width - wallThickness/2, room.y, wallThickness/2, room.height);
+                RectInt WallBottom = new RectInt(room.x, room.y, room.width, wallThickness/2);
+                
+                AlgorithmsUtils.DebugRectInt(wallLeft, Color.yellow, Time.deltaTime, false, 0);
+                AlgorithmsUtils.DebugRectInt(WallTop, Color.yellow, Time.deltaTime, false, 0);
+                AlgorithmsUtils.DebugRectInt(WallRight, Color.yellow, Time.deltaTime, false, 0);
+                AlgorithmsUtils.DebugRectInt(WallBottom, Color.yellow, Time.deltaTime, false, 0);
+            }
         }
     }
 
@@ -48,7 +61,7 @@ public class DungeonGenerator : MonoBehaviour
         for (int i = 0; i < doors.Count; i++)
         {
             RectInt room = doors[i];
-            AlgorithmsUtils.DebugRectInt(room, Color.cyan, Time.deltaTime, false, .03f * i);
+            AlgorithmsUtils.DebugRectInt(room, Color.cyan, Time.deltaTime, false, 0);
         }
     }
 
@@ -114,8 +127,6 @@ public class DungeonGenerator : MonoBehaviour
             safetyAmount--;
             
             SplitRoom(splittableRooms[0], rng.NextBool());
-            print(safetyAmount);
-            print(splittableRooms.Count);
             
             previousSplittableRoomsCount = currentSplittableRoomsCount;
         }
@@ -165,14 +176,11 @@ public class DungeonGenerator : MonoBehaviour
             rooms.Remove(room);
         }
     }
-        Debug.Log("A");
         StartCoroutine(GenerateDoors());
     }
 
     IEnumerator GenerateDoors()
     {
-        Debug.Log("B");
-        
         for (int i = 0; i < rooms.Count; i++)
         {
             if (isAnimated) yield return new WaitForEndOfFrame();
