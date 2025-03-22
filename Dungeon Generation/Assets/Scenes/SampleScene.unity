@@ -174,8 +174,9 @@ MonoBehaviour:
     width: 15
     height: 15
   wallThickness: 2
-  seed: 2
+  seed: 3
   isAnimated: 1
+  showWalls: 1
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

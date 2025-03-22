@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
@@ -17,6 +18,7 @@ public class DungeonGenerator : MonoBehaviour
     
     new List<RectInt> splittableRooms = new List<RectInt>();
  
+    [Header("Specifications")]
     [SerializeField] RectInt boundary = new RectInt(0, 0, 200, 200);
     [SerializeField] RectInt minRoomRect = new RectInt(0, 0, 10, 10);
     [SerializeField] int wallThickness = 2;
@@ -24,19 +26,20 @@ public class DungeonGenerator : MonoBehaviour
     [Header("Seed")]
     [SerializeField] int seed;
 
-    [Header("Animation")]
+    [Header("Visual")]
     [SerializeField] bool isAnimated = true;
+    [SerializeField] bool showWalls = true;
 
 
 
     void DrawRooms()
     {
-        AlgorithmsUtils.DebugRectInt(boundary, Color.green, 100000, false, 0);
+        AlgorithmsUtils.DebugRectInt(boundary, Color.green, Time.deltaTime, false, 0);
 
         for (int i = 0; i < rooms.Count; i++)
         {
             RectInt room = rooms[i];
-            AlgorithmsUtils.DebugRectInt(room, Color.yellow, 100000, false, .03f * i);
+            AlgorithmsUtils.DebugRectInt(room, Color.yellow, Time.deltaTime, false, .03f * i);
         }
     }
 
@@ -45,7 +48,7 @@ public class DungeonGenerator : MonoBehaviour
         for (int i = 0; i < doors.Count; i++)
         {
             RectInt room = doors[i];
-            AlgorithmsUtils.DebugRectInt(room, Color.cyan, 100000, false, .03f * i);
+            AlgorithmsUtils.DebugRectInt(room, Color.cyan, Time.deltaTime, false, .03f * i);
         }
     }
 
@@ -53,36 +56,68 @@ public class DungeonGenerator : MonoBehaviour
     {
         foreach (RectInt room in dungeon.GetNodes())
         {
-            Vector3 roomPos = new Vector3(room.x + room.width / 2, 0, room.y + room.height / 2);
-            DebugExtension.DebugCircle(roomPos, Color.green, 3, 100000, false);
+            Vector3 roomPos = new Vector3(room.x + room.width / 2, Time.deltaTime, room.y + room.height / 2);
+            DebugExtension.DebugCircle(roomPos, Color.green, 3, Time.deltaTime, false);
 
             foreach (RectInt neighbor in dungeon.GetNeighbors(room))
             {
                 Vector3 neighborPos = new Vector3(neighbor.x + neighbor.width / 2, 0, neighbor.y + neighbor.height / 2);
-                Debug.DrawLine(roomPos, neighborPos, Color.green, 100000, false);
+                Debug.DrawLine(roomPos, neighborPos, Color.green, Time.deltaTime, false);
             }
         }
     }
 
-    void Awake()
+    void Start()
     {
-        rng = new Random(Convert.ToUInt32(seed));
-        
-        GenerateRooms();
-        GenerateDoors();
-        GenerateDungeonGraph();
+        GenerateDungeon();
     }
 
-    //[Button("Generate Rooms")]
-    void GenerateRooms()
+    void Update()
+    {
+        DrawGraph();
+        DrawDoors();
+        DrawRooms();
+    }
+
+    [Button("Generate Dungeon")]
+    void GenerateDungeon()
+    {
+        dungeon.Clear();
+        rooms.Clear();
+        doors.Clear();
+        splittableRooms.Clear();
+        
+        
+        rng = new Random(Convert.ToUInt32(seed));
+        
+        StartCoroutine(GenerateRooms());
+    }
+    
+    IEnumerator GenerateRooms()
     {
         SplitRoom(boundary, rng.NextBool());
 
-        int amount = 0;
-        while (splittableRooms.Count > 0 && amount < 10000)
+        int safetyAmount = 10000; // Unity kept crashing due to infinite while loops at the start, this no longer is necessary.
+        int previousSplittableRoomsCount = splittableRooms.Count;
+        int previousSplittableRoomsCountStreak = 0;
+        while (splittableRooms.Count > 0 && safetyAmount > 0)
         {
-            amount++;
+            int currentSplittableRoomsCount = splittableRooms.Count;
+            if (previousSplittableRoomsCount == currentSplittableRoomsCount)
+                previousSplittableRoomsCountStreak++;
+            else
+                previousSplittableRoomsCountStreak = 0;
+
+            if (previousSplittableRoomsCountStreak >= 50) break;
+            
+            if (isAnimated) yield return new WaitForEndOfFrame();
+            safetyAmount--;
+            
             SplitRoom(splittableRooms[0], rng.NextBool());
+            print(safetyAmount);
+            print(splittableRooms.Count);
+            
+            previousSplittableRoomsCount = currentSplittableRoomsCount;
         }
 
 
@@ -108,7 +143,7 @@ public class DungeonGenerator : MonoBehaviour
             else                        // Odd
             {
                 room1Height = Mathf.RoundToInt(room.height * room1Divider);
-                room2Height = Mathf.RoundToInt(room.height * room2Divider-1); //+1
+                room2Height = Mathf.RoundToInt(room.height * room2Divider); //+1
             }
             
             room1 = new RectInt(room.x, room.y + room2Height, room.width, room1Height);
@@ -127,7 +162,7 @@ public class DungeonGenerator : MonoBehaviour
             else                        // Odd
             {
                 room1Width = Mathf.RoundToInt(room.width * room1Divider);
-                room2Width = Mathf.RoundToInt(room.width * room2Divider-1); //+1
+                room2Width = Mathf.RoundToInt(room.width * room2Divider); //+1
             }
             
             room1 = new RectInt(room.x, room.y, room1Width, room.height);
@@ -153,15 +188,17 @@ public class DungeonGenerator : MonoBehaviour
             rooms.Remove(room);
         }
     }
-        
-
-        DrawRooms();
+        Debug.Log("A");
+        StartCoroutine(GenerateDoors());
     }
 
-    void GenerateDoors()
+    IEnumerator GenerateDoors()
     {
+        Debug.Log("B");
+        
         for (int i = 0; i < rooms.Count; i++)
         {
+            if (isAnimated) yield return new WaitForEndOfFrame();
             RectInt targetRoom = rooms[i];
             
             for (int ii = 0; ii < rooms.Count; ii++)
@@ -214,14 +251,15 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
-
-        DrawDoors();
+        StartCoroutine(GenerateDungeonGraph());
     }
     
-    void GenerateDungeonGraph()
+    IEnumerator GenerateDungeonGraph()
     {
         for (int i = 0; i < doors.Count; i++)
         {
+            if (isAnimated) yield return new WaitForEndOfFrame();
+            
             RectInt door = doors[i];
             
             RectInt room1 = RectInt.zero;
@@ -251,10 +289,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             Debug.Log("Not all rooms are connected! " + dungeon.GetNodeCount() + "/" +  rooms.Count);
         }
-        
-        DrawGraph();
     }
-    
 }
 
 
