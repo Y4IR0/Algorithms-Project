@@ -127,43 +127,20 @@ public class DungeonGenerator : MonoBehaviour
         RectInt room2;
 
         float room1Divider = rng.NextInt(4, 6) * .1f;
-        float room2Divider = 1 - room1Divider;
         
         
         if (splitHorizontally)
         {
-            int room1Height;
-            int room2Height;
-            
-            if (room.height % 2 == 0)   // Even
-            {
-                room1Height = Mathf.RoundToInt(room.height * room1Divider);
-                room2Height = Mathf.RoundToInt(room.height * room2Divider);
-            }
-            else                        // Odd
-            {
-                room1Height = Mathf.RoundToInt(room.height * room1Divider);
-                room2Height = Mathf.RoundToInt(room.height * room2Divider); //+1
-            }
+            int room1Height = Mathf.RoundToInt(room.height * room1Divider);
+            int room2Height =  Mathf.RoundToInt(room.height - room1Height);
             
             room1 = new RectInt(room.x, room.y + room2Height, room.width, room1Height);
             room2 = new RectInt(room.x, room.y, room.width, room2Height);
         }
         else
         {
-            int room1Width;
-            int room2Width;
-            
-            if (room.width % 2 == 0)    // Even
-            {
-                room1Width = Mathf.RoundToInt(room.width * room1Divider);
-                room2Width = Mathf.RoundToInt(room.width * room2Divider);
-            }
-            else                        // Odd
-            {
-                room1Width = Mathf.RoundToInt(room.width * room1Divider);
-                room2Width = Mathf.RoundToInt(room.width * room2Divider); //+1
-            }
+            int room1Width = Mathf.RoundToInt(room.width * room1Divider);
+            int room2Width = Mathf.RoundToInt(room.width - room1Width);
             
             room1 = new RectInt(room.x, room.y, room1Width, room.height);
             room2 = new RectInt(room.x + room1Width, room.y, room2Width, room.height);
