@@ -5,7 +5,6 @@ using UnityEngine;
 using Unity.Mathematics;
 using Random = Unity.Mathematics.Random;
 using NaughtyAttributes;
-using UnityEngine.UIElements;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -93,7 +92,7 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     [Button("Generate Dungeon")]
-    void GenerateDungeon()
+    IEnumerator GenerateDungeon()
     {
         dungeon.Clear();
         rooms.Clear();
@@ -103,11 +102,18 @@ public class DungeonGenerator : MonoBehaviour
         
         rng = new Random(Convert.ToUInt32(seed));
         
-        StartCoroutine(GenerateRooms());
+        yield return StartCoroutine(GenerateRooms());
+        yield return StartCoroutine(GenerateDoors());
+        yield return StartCoroutine(RemoveRooms());
+        yield return StartCoroutine(GenerateDoors());
+        yield return StartCoroutine(GenerateDungeonGraph());
     }
+    
+    
     
     IEnumerator GenerateRooms()
     {
+        rooms.Clear();
         SplitRoom(boundary, rng.NextBool());
 
         int safetyAmount = 10000; // Unity kept crashing due to infinite while loops at the start, this no longer is necessary.
@@ -176,11 +182,14 @@ public class DungeonGenerator : MonoBehaviour
             rooms.Remove(room);
         }
     }
-        StartCoroutine(GenerateDoors());
     }
 
+    
+    
     IEnumerator GenerateDoors()
     {
+        doors.Clear();
+        
         for (int i = 0; i < rooms.Count; i++)
         {
             if (isAnimated) yield return new WaitForEndOfFrame();
@@ -236,8 +245,9 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
-        StartCoroutine(GenerateDungeonGraph());
     }
+    
+    
     
     IEnumerator GenerateDungeonGraph()
     {
@@ -268,12 +278,98 @@ public class DungeonGenerator : MonoBehaviour
                 dungeon.AddEdge(room1, room2); // Adds connection to dungeon graph
         }
         
+        // Logs message about if all rooms are connected
         if (dungeon.GetNodeCount() == rooms.Count)
             Debug.Log("All rooms are connected! " + dungeon.GetNodeCount() + "/" +  rooms.Count);
         else
-        {
             Debug.Log("Not all rooms are connected! " + dungeon.GetNodeCount() + "/" +  rooms.Count);
+    }
+
+    
+    
+    IEnumerator RemoveRooms()
+    {
+        List<RectInt> roomsDuplicate = new List<RectInt>();
+
+        foreach (RectInt room in rooms) // Fills the roomsDuplicate list
+            roomsDuplicate.Add(room);
+        
+        rooms.Clear(); // Clears rooms
+        
+        while (roomsDuplicate.Count > 1) // Sort rooms from high to low
+        {
+            int largestRoomIndex = -1;
+            int largestRoomSize = 0;
+        
+            for (int i = 0; i < roomsDuplicate.Count; i++)
+            {
+                RectInt currentRoom = roomsDuplicate[i];
+                int currentRoomSize = currentRoom.height * currentRoom.width;
+                
+                if (currentRoomSize > largestRoomSize)
+                {
+                    largestRoomIndex = i;
+                    largestRoomSize = currentRoomSize;
+                }
+            }
+        
+            rooms.Add(roomsDuplicate[largestRoomIndex]);
+            roomsDuplicate.Remove(roomsDuplicate[largestRoomIndex]);
         }
+        
+        int roomsStartCount = rooms.Count;
+        int roomsEndCount = Convert.ToInt32(roomsStartCount * .9f);
+        
+        while (rooms.Count > roomsEndCount) // Removes rooms until not able
+        {
+            RectInt toRemoveRoom = rooms[rooms.Count - 1];
+            rooms.RemoveAt(rooms.Count - 1);
+
+            if (DungeonIsConnected() == false) // Checks if not connected
+            {
+                rooms.Add(toRemoveRoom);
+                break;
+            }
+            
+            if (isAnimated) yield return new WaitForEndOfFrame();
+        }
+        
+        // Log amount of removed rooms
+        Debug.Log("Succesfully removed " + (roomsStartCount - rooms.Count) + " rooms!");
+    }
+
+    
+    
+    bool DungeonIsConnected()
+    {
+        dungeon.Clear();
+        
+        for (int i = 0; i < doors.Count; i++)
+        {
+            RectInt door = doors[i];
+            
+            RectInt room1 = RectInt.zero;
+            RectInt room2 = RectInt.zero;
+
+            for (int ii = 0; ii < rooms.Count; ii++)
+            {
+                RectInt currentRoom = rooms[ii];
+                bool intersects = AlgorithmsUtils.Intersects(door, currentRoom);
+
+                if (intersects)
+                {
+                    if (room1 == RectInt.zero)
+                        room1 = currentRoom;
+                    else
+                        room2 = currentRoom;
+                }
+            }
+            
+            if (room1 != RectInt.zero && room2 != RectInt.zero)
+                dungeon.AddEdge(room1, room2); // Adds connection to dungeon graph
+        }
+        
+        return dungeon.GetNodeCount() == rooms.Count;
     }
 }
 
