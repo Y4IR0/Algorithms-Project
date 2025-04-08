@@ -12,8 +12,8 @@ public class DungeonGenerator : MonoBehaviour
     
     new Graph<RectInt> dungeon = new Graph<RectInt>();
     
-    new List<RectInt> rooms = new List<RectInt>();
-    new List<RectInt> doors = new List<RectInt>(); 
+    public new List<RectInt> rooms = new List<RectInt>();
+    public new List<RectInt> doors = new List<RectInt>(); 
     
     new List<RectInt> splittableRooms = new List<RectInt>();
  
@@ -251,6 +251,8 @@ public class DungeonGenerator : MonoBehaviour
     
     IEnumerator GenerateDungeonGraph()
     {
+        dungeon.Clear();
+        
         for (int i = 0; i < doors.Count; i++)
         {
             if (isAnimated) yield return new WaitForEndOfFrame();

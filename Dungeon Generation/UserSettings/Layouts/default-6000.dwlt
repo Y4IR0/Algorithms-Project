@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 1007
   m_ShowMode: 4
-  m_Title: Project
+  m_Title: Hierarchy
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 22
+  controlID: 17
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -919,7 +919,7 @@ MonoBehaviour:
       scrollOffset: 0
     m_OverlaysVisible: 1
   m_WindowGUID: 81e8ecb8d0c46ca4c812a4fd7cd68a06
-  m_Gizmos: 1
+  m_Gizmos: 0
   m_OverrideSceneCullingMask: 6917529027641081856
   m_SceneIsLit: 1
   m_SceneLighting: 1
@@ -929,9 +929,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 59.682953, y: 78.19511, z: 26.736488}
+    m_Target: {x: 18.899204, y: -1.0329274, z: 5.518991}
     speed: 2
-    m_Value: {x: 59.682953, y: 78.19511, z: 26.736488}
+    m_Value: {x: 19.120665, y: -2.082963, z: 0.4950448}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -977,9 +977,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.5750841, y: -0.009892349, z: 0.0056768963, w: 0.818208}
+    m_Target: {x: 0.6231501, y: -0.0038107731, z: 0.00142476, w: 0.78231394}
     speed: 2
-    m_Value: {x: -0.5750841, y: 0.009892349, z: -0.0056768963, w: -0.818208}
+    m_Value: {x: -0.6553705, y: -0.009877948, z: 0.010181101, w: -0.75540346}
   m_Size:
     m_Target: 10
     speed: 2
@@ -1081,7 +1081,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: d4700000
     m_LastClickedID: 28884
-    m_ExpandedIDs: 000000009ea60000
+    m_ExpandedIDs: 000000008ca700008ea70000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1110,7 +1110,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000009ea60000
+    m_ExpandedIDs: 000000008ca700008ea70000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1215,7 +1215,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1225,16 +1225,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts
+  - Assets
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\PC\Documents\GitHub\Algorithms-Project\Dungeon Generation
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 86a80000
-    m_LastClickedID: 43142
-    m_ExpandedIDs: 000000009ea60000
+    m_SelectedIDs: 70a70000
+    m_LastClickedID: 42864
+    m_ExpandedIDs: 000000008ca700008ea70000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1263,7 +1263,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 557}
     m_SelectedIDs: a87a0000
     m_LastClickedID: 31400
-    m_ExpandedIDs: 000000009ea60000
+    m_ExpandedIDs: 000000008ca700008ea70000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

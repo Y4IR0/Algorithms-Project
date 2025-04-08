@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 165793257}
   - component: {fileID: 165793258}
+  - component: {fileID: 165793259}
   m_Layer: 0
   m_Name: DungeonGenerator
   m_TagString: Untagged
@@ -163,6 +164,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bbe19b42eec229459300915e468aa94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rooms: []
+  doors: []
   boundary:
     x: 0
     y: 0
@@ -177,6 +180,25 @@ MonoBehaviour:
   seed: 3
   isAnimated: 1
   showWalls: 1
+--- !u!114 &165793259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165793256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dadffdbd0b55ebc4895aa8084d6606d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeonGenerator: {fileID: 165793258}
+  prefabs:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 3599659876755508781, guid: 9f027e45c15dd1744928ec2090bfb406, type: 3}
+    - Key: 1
+      Value: {fileID: 3599659876755508781, guid: 0172b309405886843a67b67a66a15a2d, type: 3}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
