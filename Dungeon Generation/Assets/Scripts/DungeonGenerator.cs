@@ -21,6 +21,7 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] RectInt boundary = new RectInt(0, 0, 200, 200);
     [SerializeField] RectInt minRoomRect = new RectInt(0, 0, 10, 10);
     [SerializeField] int wallThickness = 2;
+    [SerializeField] int doorWidth = 4;
 
     [Header("Seed")]
     [SerializeField] int seed;
@@ -202,8 +203,6 @@ public class DungeonGenerator : MonoBehaviour
                 if (neighborRoom == targetRoom) continue;
                 
                 // Creating variables
-                int doorWidth = 3;
-
                 int x;
                 int y;
                 int width;

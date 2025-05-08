@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: f99dc9db8653e3d44a99d1ea22157612, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -177,6 +177,7 @@ MonoBehaviour:
     width: 15
     height: 15
   wallThickness: 2
+  doorWidth: 3
   seed: 3
   isAnimated: 1
   showWalls: 1
@@ -193,12 +194,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dungeonGenerator: {fileID: 165793258}
+  objectSpawnType: 0
+  floorFillType: 0
   prefabs:
     _serializedList:
     - Key: 0
       Value: {fileID: 3599659876755508781, guid: 9f027e45c15dd1744928ec2090bfb406, type: 3}
     - Key: 1
       Value: {fileID: 3599659876755508781, guid: 0172b309405886843a67b67a66a15a2d, type: 3}
+    - Key: 2
+      Value: {fileID: 3599659876755508781, guid: 8880dcfc575c8d74181ecc44d9b46f26, type: 3}
+    - Key: 3
+      Value: {fileID: 3599659876755508781, guid: 4976d09a5287d42498d339b60e3b46a6, type: 3}
+    - Key: 4
+      Value: {fileID: 3599659876755508781, guid: 7eca3fa0959901a4db76288f5d50b690, type: 3}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -593,7 +602,7 @@ Transform:
   m_GameObject: {fileID: 2018303373}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40.950043, y: 113.86417, z: 43.252586}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
