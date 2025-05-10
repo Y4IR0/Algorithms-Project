@@ -18,7 +18,7 @@ public class DungeonGenerator : MonoBehaviour
     new List<RectInt> splittableRooms = new List<RectInt>();
  
     [Header("Specifications")]
-    [SerializeField] RectInt boundary = new RectInt(0, 0, 200, 200);
+    [SerializeField] public RectInt boundary = new RectInt(0, 0, 200, 200);
     [SerializeField] RectInt minRoomRect = new RectInt(0, 0, 10, 10);
     [SerializeField] int wallThickness = 2;
     [SerializeField] int doorWidth = 4;

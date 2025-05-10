@@ -180,7 +180,7 @@ MonoBehaviour:
   wallThickness: 2
   doorWidth: 3
   seed: 3
-  isAnimated: 1
+  isAnimated: 0
   showWalls: 1
 --- !u!114 &165793259
 MonoBehaviour:
@@ -195,8 +195,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dungeonGenerator: {fileID: 165793258}
-  objectSpawnType: 0
-  floorFillType: 0
+  objectSpawnType: 1
+  floorFillType: 1
   prefabs:
     _serializedList:
     - Key: 0
@@ -209,6 +209,23 @@ MonoBehaviour:
       Value: {fileID: 3599659876755508781, guid: 4976d09a5287d42498d339b60e3b46a6, type: 3}
     - Key: 4
       Value: {fileID: 3599659876755508781, guid: 7eca3fa0959901a4db76288f5d50b690, type: 3}
+  indexes:
+  - {fileID: 2973754348859378343, guid: 5ea614d4b0fb08f4a8e6069c2ffbf51a, type: 3}
+  - {fileID: 2973754348859378343, guid: 2c6b616916dd20640a89ab71654347c7, type: 3}
+  - {fileID: 2973754348859378343, guid: b61a2095fee11c04797b3c466ad615b6, type: 3}
+  - {fileID: 2973754348859378343, guid: 9a076e785cfd3d54a8d1371efa37249f, type: 3}
+  - {fileID: 2973754348859378343, guid: 53db17bbd453421428589071b56f7726, type: 3}
+  - {fileID: 2973754348859378343, guid: 42676ea02e84de843a431b5bc5062b23, type: 3}
+  - {fileID: 2973754348859378343, guid: a33652980a2908d428c57d4d4b5f9e48, type: 3}
+  - {fileID: 2973754348859378343, guid: b30190c84dbeb2d4498b439262e54384, type: 3}
+  - {fileID: 2973754348859378343, guid: 853c849b261ed7b4b986b38f3acb1ea2, type: 3}
+  - {fileID: 2973754348859378343, guid: 6cad07071c6b7fa46994876f96afbe37, type: 3}
+  - {fileID: 2973754348859378343, guid: 91287a7dd2fc1e644b2988fbfda4020c, type: 3}
+  - {fileID: 2973754348859378343, guid: 0a37fbdb687b50943801723521ff0be7, type: 3}
+  - {fileID: 2973754348859378343, guid: 7ebb82f5704600244ba372dd1b5aa73a, type: 3}
+  - {fileID: 2973754348859378343, guid: d3d87b889dfdbda4c80e2ab90d3d6648, type: 3}
+  - {fileID: 2973754348859378343, guid: dac0d4dd290fbf84589f5fe9638279d9, type: 3}
+  - {fileID: 2973754348859378343, guid: 815b95ca326c987468d1580f714b6ad7, type: 3}
 --- !u!114 &165793260
 MonoBehaviour:
   m_ObjectHideFlags: 0

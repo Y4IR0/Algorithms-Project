@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using AYellowpaper.SerializedCollections;
+using Extensions;
 
 public class DungeonVisualizer : MonoBehaviour
 {
@@ -52,6 +53,9 @@ public class DungeonVisualizer : MonoBehaviour
     public SerializedDictionary<Object, Transform> prefabs = new SerializedDictionary<Object, Transform>();
     private HashSet<Transform> objects = new HashSet<Transform>();
     private List<Vector3> doorPositions = new List<Vector3>();
+    
+    [Header("Marching Squares")]
+    [SerializeField] private Transform[] indexes;
     
     
     
@@ -233,6 +237,38 @@ public class DungeonVisualizer : MonoBehaviour
         else if (objectSpawnType == ObjectSpawnType.MarchingSquares)
         {
             
+            int[,] tileMap = new int[dungeonGenerator.boundary.height, dungeonGenerator.boundary.width];
+            int rows = tileMap.GetLength(0);
+            int cols = tileMap.GetLength(1);
+
+            List<RectInt> rooms = dungeonGenerator.rooms;
+
+            //Fill the map with empty spaces
+            foreach (RectInt room in rooms) {
+                AlgorithmsUtils.FillRectangleOutline(tileMap, room, 1);
+            }
+            foreach (RectInt door in dungeonGenerator.doors) {
+                AlgorithmsUtils.FillRectangle(tileMap, door, 0);
+            }
+
+            //Draw the rooms
+            for (int row = 0; row < rows - 1; row++)
+            {
+                for (int col = 0; col < cols - 1; col++)
+                {
+                    int a = tileMap[row + 1, col];
+                    int b = tileMap[row + 1, col + 1];
+                    int c = tileMap[row, col + 1];
+                    int d = tileMap[row, col];
+                
+                    int ID = a * 1 + b * 2 + c * 4 + d * 8;
+
+                    if (ID == 0) continue;
+                    
+                    Transform prefab = Instantiate(indexes[ID]);
+                    prefab.position = new Vector3(col + .5f, 0, row + .5f);
+                }
+            }
         }
         
         
