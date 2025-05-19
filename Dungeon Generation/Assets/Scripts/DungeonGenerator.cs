@@ -10,7 +10,7 @@ public class DungeonGenerator : MonoBehaviour
 {
     Random rng;
     
-    new Graph<RectInt> dungeon = new Graph<RectInt>();
+    public new Graph<RectInt> dungeon = new Graph<RectInt>();
     
     public new List<RectInt> rooms = new List<RectInt>();
     public new List<RectInt> doors = new List<RectInt>(); 

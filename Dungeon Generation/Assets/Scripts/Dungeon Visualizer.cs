@@ -42,7 +42,7 @@ public class DungeonVisualizer : MonoBehaviour
     }
     
     [SerializeField]
-    DungeonGenerator dungeonGenerator;
+    DungeonGenerator generator;
     
     [Header("Settings")]
     [SerializeField] private ObjectSpawnType objectSpawnType = ObjectSpawnType.Simple;
@@ -57,6 +57,8 @@ public class DungeonVisualizer : MonoBehaviour
     [Header("Marching Squares")]
     [SerializeField] private Transform[] indexes;
     
+    [Header("Flood Fill")]
+    [SerializeField] private  Graph<Vector2Int> floodfill = new Graph<Vector2Int>();
     
     
     void TrySpawnObject(Object obj, Vector2 position, Side side, Transform roomParent)
@@ -152,7 +154,7 @@ public class DungeonVisualizer : MonoBehaviour
         if (objectSpawnType == ObjectSpawnType.Simple)
         {
             // Door
-        foreach (RectInt door in dungeonGenerator.doors)
+        foreach (RectInt door in generator.doors)
         {
             //Vector3 doorPosition = new Vector3(door.x + .5f, 0, door.y + .5f);
             
@@ -196,9 +198,9 @@ public class DungeonVisualizer : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < dungeonGenerator.rooms.Count; i++)
+        for (int i = 0; i < generator.rooms.Count; i++)
         {
-            RectInt currentRoom = dungeonGenerator.rooms[i];
+            RectInt currentRoom = generator.rooms[i];
             Transform roomParent = new GameObject("Room x: " + currentRoom.x + " y: " + currentRoom.y).transform;
             roomParent.parent = parent;
             objects.Add(roomParent);
@@ -237,17 +239,17 @@ public class DungeonVisualizer : MonoBehaviour
         else if (objectSpawnType == ObjectSpawnType.MarchingSquares)
         {
             
-            int[,] tileMap = new int[dungeonGenerator.boundary.height, dungeonGenerator.boundary.width];
+            int[,] tileMap = new int[generator.boundary.height, generator.boundary.width];
             int rows = tileMap.GetLength(0);
             int cols = tileMap.GetLength(1);
 
-            List<RectInt> rooms = dungeonGenerator.rooms;
+            List<RectInt> rooms = generator.rooms;
 
             //Fill the map with empty spaces
             foreach (RectInt room in rooms) {
                 AlgorithmsUtils.FillRectangleOutline(tileMap, room, 1);
             }
-            foreach (RectInt door in dungeonGenerator.doors) {
+            foreach (RectInt door in generator.doors) {
                 AlgorithmsUtils.FillRectangle(tileMap, door, 0);
             }
 
@@ -263,7 +265,27 @@ public class DungeonVisualizer : MonoBehaviour
                 
                     int ID = a * 1 + b * 2 + c * 4 + d * 8;
 
-                    if (ID == 0) continue;
+                    if (ID == 0)
+                    {
+                        Vector2Int fromNode = new Vector2Int(col, row);
+                    
+                        // Top
+                        if (row + 1 < generator.boundary.height)
+                            floodfill.AddEdge(fromNode, new Vector2Int(col, row + 1));
+                    
+                        // Right
+                        if (col + 1 < generator.boundary.height)
+                            floodfill.AddEdge(fromNode, new Vector2Int(col + 1, row));
+                    
+                        // Bottem
+                        if (row - 1 < generator.boundary.height)
+                            floodfill.AddEdge(fromNode, new Vector2Int(col, row - 1));
+                    
+                        // Left
+                        if (col - 1 < generator.boundary.height)
+                            floodfill.AddEdge(fromNode, new Vector2Int(col - 1, row));
+                        continue;
+                    }
                     
                     Transform prefab = Instantiate(indexes[ID]);
                     prefab.position = new Vector3(col + .5f, 0, row + .5f);
@@ -283,9 +305,9 @@ public class DungeonVisualizer : MonoBehaviour
         // Floor
         if (floorFillType == FloorFillType.Simple)
         {
-            for (int i = 0; i < dungeonGenerator.rooms.Count; i++)
+            for (int i = 0; i < generator.rooms.Count; i++)
             {
-                RectInt currentRoom = dungeonGenerator.rooms[i];
+                RectInt currentRoom = generator.rooms[i];
                 Transform roomParent = new GameObject("Room x: " + currentRoom.x + " y: " + currentRoom.y).transform;
                 roomParent.parent = parent;
                 objects.Add(roomParent);
@@ -302,7 +324,63 @@ public class DungeonVisualizer : MonoBehaviour
         }
         else if (floorFillType == FloorFillType.FloodFill)
         {
+            Vector2Int startNode = generator.rooms[0].position + generator.rooms[0].size/2;
             
+            HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+            Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        
+            queue.Enqueue(startNode);
+            visited.Add(startNode);
+
+            while (queue.Count > 0)
+            {
+                Vector2Int node = queue.Dequeue();
+                visited.Add(node);
+
+                foreach (Vector2Int edgeNode in floodfill.GetNeighbors(node))
+                {
+                    if (!visited.Contains(edgeNode))
+                    {
+                        queue.Enqueue(edgeNode);
+                        visited.Add(edgeNode);
+                        
+                        // Instantiate floor
+                        Transform instance = Instantiate(prefabs[Object.Floor]);
+                        Vector3 position = new Vector3(node.x + .5f, 0, node.y + .5f);
+                        instance.position = position;
+                    }
+                }
+            }
+
+            /*
+            foreach (RectInt door in generator.doors)
+            {
+                // Instantiate floor
+                Transform instance = Instantiate(prefabs[Object.Floor]);
+                        
+                Vector3 position = new Vector3(door.x + door.width/2, 0, door.y + door.height/2);
+                position += new Vector3(-.5f, 0, -.5f);
+                        
+                instance.position = position;
+                instance.localScale = new Vector3(door.width, 1, door.height);
+            }
+            
+            
+            
+            
+            
+            foreach (RectInt room in generator.dungeon.GetNodes())
+            {
+                Vector3 roomPos = new Vector3(room.x + room.width / 2, Time.deltaTime, room.y + room.height / 2);
+                DebugExtension.DebugCircle(roomPos, Color.green, 3, Time.deltaTime, false);
+
+                foreach (RectInt neighbor in generator.dungeon.GetNeighbors(room))
+                {
+                    Vector3 neighborPos = new Vector3(neighbor.x + neighbor.width / 2, 0, neighbor.y + neighbor.height / 2);
+                    Debug.DrawLine(roomPos, neighborPos, Color.green, Time.deltaTime, false);
+                }
+            }
+            */
         }
     }
 }
