@@ -22,6 +22,7 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] RectInt minRoomRect = new RectInt(0, 0, 10, 10);
     [SerializeField] int wallThickness = 2;
     [SerializeField] int doorWidth = 4;
+    [SerializeField] private bool removeRooms = true;
 
     [Header("Seed")]
     [SerializeField] int seed;
@@ -106,6 +107,7 @@ public class DungeonGenerator : MonoBehaviour
         yield return StartCoroutine(GenerateRooms());
         yield return StartCoroutine(GenerateDoors());
         yield return StartCoroutine(RemoveRooms());
+        //if (removeRooms) {yield return StartCoroutine(RemoveRooms());}
         yield return StartCoroutine(GenerateDoors());
         yield return StartCoroutine(GenerateDungeonGraph());
     }

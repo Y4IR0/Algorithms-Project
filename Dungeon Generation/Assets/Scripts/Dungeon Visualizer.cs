@@ -326,6 +326,10 @@ public class DungeonVisualizer : MonoBehaviour
         {
             Vector2Int startNode = generator.rooms[0].position + generator.rooms[0].size/2;
             
+            // Instantiate start floor tile
+            Transform startInstance = Instantiate(prefabs[Object.Floor]);
+            startInstance.position = new Vector3(startNode.x + 0.5f, 0, startNode.y + 0.5f);
+            
             HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
             Queue<Vector2Int> queue = new Queue<Vector2Int>();
         
@@ -346,7 +350,8 @@ public class DungeonVisualizer : MonoBehaviour
                         
                         // Instantiate floor
                         Transform instance = Instantiate(prefabs[Object.Floor]);
-                        Vector3 position = new Vector3(node.x + .5f, 0, node.y + .5f);
+                        Vector3 position = new Vector3(edgeNode.x + .5f, 0, edgeNode.y + .5f);
+                        // Vector3 position = new Vector3(node.x + .5f, 0, node.y + .5f);
                         instance.position = position;
                     }
                 }
