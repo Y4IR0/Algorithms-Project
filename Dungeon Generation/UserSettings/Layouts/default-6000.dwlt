@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 1007
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Hierarchy
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 22
+  controlID: 66
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -299,7 +299,7 @@ MonoBehaviour:
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1
-  m_LastVerticalScrollValue: 196
+  m_LastVerticalScrollValue: 216
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:
@@ -818,7 +818,7 @@ MonoBehaviour:
       scrollOffset: 0
     m_OverlaysVisible: 1
   m_WindowGUID: 81e8ecb8d0c46ca4c812a4fd7cd68a06
-  m_Gizmos: 0
+  m_Gizmos: 1
   m_OverrideSceneCullingMask: 6917529027641081856
   m_SceneIsLit: 1
   m_SceneLighting: 1
@@ -828,9 +828,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 103.348045, y: -19.740135, z: 91.15236}
+    m_Target: {x: 85.434296, y: 40.026665, z: 71.22538}
     speed: 2
-    m_Value: {x: 103.348045, y: -19.740135, z: 91.15236}
+    m_Value: {x: 85.434296, y: 40.026665, z: 71.22538}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -876,9 +876,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.69033426, y: 0.00010976506, z: -0.0055763475, w: 0.7238496}
+    m_Target: {x: 0.5822286, y: 0.0349266, z: -0.030099008, w: 0.8120589}
     speed: 2
-    m_Value: {x: -0.69033426, y: -0.00010976507, z: 0.005576348, w: -0.72384965}
+    m_Value: {x: -0.5822286, y: -0.0349266, z: 0.030099008, w: -0.8120589}
   m_Size:
     m_Target: 51.875782
     speed: 2
@@ -1232,8 +1232,8 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 9}
-    m_SelectedIDs: d6ad0000
-    m_LastClickedID: 44502
+    m_SelectedIDs: dcad0000
+    m_LastClickedID: 44508
     m_ExpandedIDs: 00000000d8ab0000daab0000dcab0000deab0000e0ab0000e2ab0000e4ab0000e6ab0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0

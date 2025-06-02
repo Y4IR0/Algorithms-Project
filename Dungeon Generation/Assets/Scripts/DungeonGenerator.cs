@@ -106,8 +106,8 @@ public class DungeonGenerator : MonoBehaviour
         
         yield return StartCoroutine(GenerateRooms());
         yield return StartCoroutine(GenerateDoors());
-        yield return StartCoroutine(RemoveRooms());
-        //if (removeRooms) {yield return StartCoroutine(RemoveRooms());}
+        //yield return StartCoroutine(RemoveRooms());
+        if (removeRooms) {yield return StartCoroutine(RemoveRooms());}
         yield return StartCoroutine(GenerateDoors());
         yield return StartCoroutine(GenerateDungeonGraph());
     }
@@ -130,9 +130,9 @@ public class DungeonGenerator : MonoBehaviour
             else
                 previousSplittableRoomsCountStreak = 0;
 
-            if (previousSplittableRoomsCountStreak >= 50) break;
+            if (previousSplittableRoomsCountStreak >= 50) {previousSplittableRoomsCount = currentSplittableRoomsCount; break;}
             
-            if (isAnimated) yield return new WaitForEndOfFrame();
+            if (isAnimated) yield return null;
             safetyAmount--;
             
             SplitRoom(splittableRooms[0], rng.NextBool());
@@ -195,7 +195,7 @@ public class DungeonGenerator : MonoBehaviour
         
         for (int i = 0; i < rooms.Count; i++)
         {
-            if (isAnimated) yield return new WaitForEndOfFrame();
+            if (isAnimated) yield return null;
             RectInt targetRoom = rooms[i];
             
             for (int ii = 0; ii < rooms.Count; ii++)
@@ -256,7 +256,7 @@ public class DungeonGenerator : MonoBehaviour
         
         for (int i = 0; i < doors.Count; i++)
         {
-            if (isAnimated) yield return new WaitForEndOfFrame();
+            if (isAnimated) yield return null;
             
             RectInt door = doors[i];
             
@@ -334,7 +334,7 @@ public class DungeonGenerator : MonoBehaviour
                 break;
             }
             
-            if (isAnimated) yield return new WaitForEndOfFrame();
+            if (isAnimated) yield return null;
         }
         
         // Log amount of removed rooms
