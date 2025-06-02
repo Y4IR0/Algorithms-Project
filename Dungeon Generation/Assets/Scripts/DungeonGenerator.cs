@@ -30,6 +30,7 @@ public class DungeonGenerator : MonoBehaviour
     [Header("Visual")]
     [SerializeField] bool isAnimated = true;
     [SerializeField] bool showWalls = true;
+    [SerializeField] bool showMethodLogs = true;
 
 
 
@@ -106,7 +107,6 @@ public class DungeonGenerator : MonoBehaviour
         
         yield return StartCoroutine(GenerateRooms());
         yield return StartCoroutine(GenerateDoors());
-        //yield return StartCoroutine(RemoveRooms());
         if (removeRooms) {yield return StartCoroutine(RemoveRooms());}
         yield return StartCoroutine(GenerateDoors());
         yield return StartCoroutine(GenerateDungeonGraph());
@@ -116,6 +116,8 @@ public class DungeonGenerator : MonoBehaviour
     
     IEnumerator GenerateRooms()
     {
+        if (showMethodLogs) {Debug.Log("Generating Rooms");}
+        
         rooms.Clear();
         SplitRoom(boundary, rng.NextBool());
 
@@ -142,55 +144,58 @@ public class DungeonGenerator : MonoBehaviour
 
 
         void SplitRoom(RectInt room, bool splitHorizontally)
-    {
-        RectInt room1;
-        RectInt room2;
+        {
+            RectInt room1;
+            RectInt room2;
 
-        float room1Divider = rng.NextInt(4, 6) * .1f;
+            float room1Divider = rng.NextInt(4, 6) * .1f;
         
         
-        if (splitHorizontally)
-        {
-            int room1Height = Mathf.RoundToInt(room.height * room1Divider);
-            int room2Height =  Mathf.RoundToInt(room.height - room1Height);
+            if (splitHorizontally)
+            {
+                int room1Height = Mathf.RoundToInt(room.height * room1Divider);
+                int room2Height =  Mathf.RoundToInt(room.height - room1Height);
             
-            room1 = new RectInt(room.x, room.y + room2Height, room.width, room1Height);
-            room2 = new RectInt(room.x, room.y, room.width, room2Height);
-        }
-        else
-        {
-            int room1Width = Mathf.RoundToInt(room.width * room1Divider);
-            int room2Width = Mathf.RoundToInt(room.width - room1Width);
+                room1 = new RectInt(room.x, room.y + room2Height, room.width, room1Height);
+                room2 = new RectInt(room.x, room.y, room.width, room2Height);
+            }
+            else
+            {
+                int room1Width = Mathf.RoundToInt(room.width * room1Divider);
+                int room2Width = Mathf.RoundToInt(room.width - room1Width);
             
-            room1 = new RectInt(room.x, room.y, room1Width, room.height);
-            room2 = new RectInt(room.x + room1Width, room.y, room2Width, room.height);
-        }
+                room1 = new RectInt(room.x, room.y, room1Width, room.height);
+                room2 = new RectInt(room.x + room1Width, room.y, room2Width, room.height);
+            }
         
         
         
         
-        // Check if not splittable
-        if (room1.width <= minRoomRect.width || room2.width <= minRoomRect.width || room1.height <= minRoomRect.height || room2.height <= minRoomRect.height)
-        {
-        }
-        else
-        {
-            splittableRooms.Add(room1);
-            splittableRooms.Add(room2);
+            // Check if not splittable
+            if (room1.width <= minRoomRect.width || room2.width <= minRoomRect.width || room1.height <= minRoomRect.height || room2.height <= minRoomRect.height)
+            {
+            }
+            else
+            {
+                splittableRooms.Add(room1);
+                splittableRooms.Add(room2);
             
-            rooms.Add(room1);
-            rooms.Add(room2);
+                rooms.Add(room1);
+                rooms.Add(room2);
             
-            splittableRooms.Remove(room);
-            rooms.Remove(room);
+                splittableRooms.Remove(room);
+                rooms.Remove(room);
+            }
         }
-    }
+        if (showMethodLogs) {Debug.Log("Finished Generating Rooms");}
     }
 
     
     
     IEnumerator GenerateDoors()
     {
+        if (showMethodLogs) {Debug.Log("Generating Doors");}
+        
         doors.Clear();
         
         for (int i = 0; i < rooms.Count; i++)
@@ -246,12 +251,16 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
+        
+        if (showMethodLogs) {Debug.Log("Finished Generating Doors");}
     }
     
     
     
     IEnumerator GenerateDungeonGraph()
     {
+        if (showMethodLogs) {Debug.Log("Generating Dungeon Graph");}
+        
         dungeon.Clear();
         
         for (int i = 0; i < doors.Count; i++)
@@ -286,12 +295,16 @@ public class DungeonGenerator : MonoBehaviour
             Debug.Log("All rooms are connected! " + dungeon.GetNodeCount() + "/" +  rooms.Count);
         else
             Debug.Log("Not all rooms are connected! " + dungeon.GetNodeCount() + "/" +  rooms.Count);
+        
+        if (showMethodLogs) {Debug.Log("Finished Generating Dungeon Graph");}
     }
 
     
     
     IEnumerator RemoveRooms()
     {
+        if (showMethodLogs) {Debug.Log("Removing Rooms...");}
+        
         List<RectInt> roomsDuplicate = new List<RectInt>();
 
         foreach (RectInt room in rooms) // Fills the roomsDuplicate list
@@ -337,6 +350,8 @@ public class DungeonGenerator : MonoBehaviour
             if (isAnimated) yield return null;
         }
         
+        if (showMethodLogs) {Debug.Log("Finished Removing Rooms");}
+        
         // Log amount of removed rooms
         Debug.Log("Succesfully removed " + (roomsStartCount - rooms.Count) + " rooms!");
     }
@@ -345,6 +360,8 @@ public class DungeonGenerator : MonoBehaviour
     
     bool DungeonIsConnected()
     {
+        if (showMethodLogs) {Debug.Log("Checking Dungeon Connection");}
+        
         dungeon.Clear();
         
         for (int i = 0; i < doors.Count; i++)
@@ -372,10 +389,10 @@ public class DungeonGenerator : MonoBehaviour
                 dungeon.AddEdge(room1, room2); // Adds connection to dungeon graph
         }
         
+        if (showMethodLogs) {Debug.Log("Finished Checking Dungeon Connection");}
         return dungeon.GetNodeCount() == rooms.Count;
     }
 }
-
 
 
 
