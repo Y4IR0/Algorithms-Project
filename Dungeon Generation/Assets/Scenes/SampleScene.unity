@@ -175,14 +175,15 @@ MonoBehaviour:
   minRoomRect:
     x: 0
     y: 0
-    width: 15
-    height: 15
+    width: 40
+    height: 40
   wallThickness: 2
   doorWidth: 3
   removeRooms: 1
   seed: 3
   isAnimated: 1
   showWalls: 1
+  showMethodLogs: 1
 --- !u!114 &165793259
 MonoBehaviour:
   m_ObjectHideFlags: 0

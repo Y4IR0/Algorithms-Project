@@ -136,8 +136,18 @@ public class DungeonGenerator : MonoBehaviour
             
             if (isAnimated) yield return null;
             safetyAmount--;
-            
-            SplitRoom(splittableRooms[0], rng.NextBool());
+            if (splittableRooms[0].width > minRoomRect.width && splittableRooms[0].height > minRoomRect.height)
+            {
+                SplitRoom(splittableRooms[0], rng.NextBool());
+            }
+            else if (splittableRooms[0].width > minRoomRect.width)
+            {
+                SplitRoom(splittableRooms[0], false);
+            }
+            else
+            {
+                SplitRoom(splittableRooms[0], true);
+            }
             
             previousSplittableRoomsCount = currentSplittableRoomsCount;
         }
@@ -172,20 +182,21 @@ public class DungeonGenerator : MonoBehaviour
         
         
             // Check if not splittable
-            if (room1.width <= minRoomRect.width || room2.width <= minRoomRect.width || room1.height <= minRoomRect.height || room2.height <= minRoomRect.height)
-            {
-            }
-            else
+            if (room1.width > minRoomRect.width || room1.height > minRoomRect.height)
             {
                 splittableRooms.Add(room1);
-                splittableRooms.Add(room2);
-            
-                rooms.Add(room1);
-                rooms.Add(room2);
-            
-                splittableRooms.Remove(room);
-                rooms.Remove(room);
             }
+            
+            if (room2.width > minRoomRect.width || room2.height > minRoomRect.height)
+            {
+                splittableRooms.Add(room2);
+            }
+            
+            rooms.Add(room1);
+            rooms.Add(room2);
+            
+            splittableRooms.Remove(room);
+            rooms.Remove(room);
         }
         if (showMethodLogs) {Debug.Log("Finished Generating Rooms");}
     }
