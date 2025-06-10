@@ -17,13 +17,11 @@ public class DungeonVisualizer : MonoBehaviour
     }
     
     
-    
     public enum ObjectSpawnType
     {
         Simple,
         MarchingSquares
     }
-    
     
     
     public enum FloorFillType
@@ -32,7 +30,7 @@ public class DungeonVisualizer : MonoBehaviour
         FloodFill
     }
 
-
+    
     public enum Side
     {
         Bottom,
@@ -40,6 +38,7 @@ public class DungeonVisualizer : MonoBehaviour
         Top,
         Right,
     }
+    
     
     [SerializeField]
     DungeonGenerator generator;
@@ -59,76 +58,50 @@ public class DungeonVisualizer : MonoBehaviour
     
     [Header("Flood Fill")]
     [SerializeField] private  Graph<Vector2Int> floodfill = new Graph<Vector2Int>();
-    
-    
+
+
     void TrySpawnObject(Object obj, Vector2 position, Side side, Transform roomParent)
+    {
+        Vector3 spawnPositionOffset = new Vector3(.5f, 0, .5f);
+        Vector3 spawnPosition = Vector3.zero;
+        Vector3 spawnRotation = Vector3.zero;
+
+        switch (side)
         {
-            Vector3 spawnPositionOffset = new Vector3(.5f, 0, .5f);
-            Vector3 spawnPosition = Vector3.zero;
-            Vector3 spawnRotation = Vector3.zero;
-
-            switch (side)
-            {
-                case Side.Bottom:
-                    spawnRotation = Vector3.zero;
-                    break;
-                case Side.Left:
-                    spawnRotation = new Vector3(0, 90, 0);
-                    break;
-                case Side.Top:
-                    spawnRotation = new Vector3(0, 180, 0);
-                    break;
-                case Side.Right:
-                    spawnRotation = new Vector3(0, -90, 0);
-                    break;
-            }
-            
-            spawnPosition = new Vector3(position.x, 0, position.y) + spawnPositionOffset;
-
-            // Checks if can spawn
-            bool canSpawn = true;
-            
-            // Checks if position already in use
-            /* // Due to performance issues, it no longer try's, it does.
-            foreach (Transform wall in objects)
-            {
-                if (spawnPosition == wall.position)
-                    canSpawn = false;
-            }
-            */
-            
-            // Checks if position in door
-            /* // Due to performance issues, it no longer try's, it does.
-            foreach (RectInt door in dungeonGenerator.doors)
-            {
-                Vector3 doorPosition = new Vector3(door.x + .5f, 0, door.y + .5f);
-                if (spawnPosition == doorPosition)
-                    canSpawn = false;
-            }
-            */
-            
-            // Checks if position in door position
-            foreach (Vector3 doorPosition in doorPositions)
-            {
-                if (spawnPosition == doorPosition)
-                    canSpawn = false;
-            }
-
-            // Stops spawn if not able to
-            if (!canSpawn) return;
-
-            Transform newWall = Instantiate(prefabs[obj]);
-            newWall.position = spawnPosition;
-            newWall.localEulerAngles = spawnRotation;
-            newWall.parent = roomParent;
-            objects.Add(newWall);
+            case Side.Bottom:
+                spawnRotation = Vector3.zero;
+                break;
+            case Side.Left:
+                spawnRotation = new Vector3(0, 90, 0);
+                break;
+            case Side.Top:
+                spawnRotation = new Vector3(0, 180, 0);
+                break;
+            case Side.Right:
+                spawnRotation = new Vector3(0, -90, 0);
+                break;
         }
 
+        spawnPosition = new Vector3(position.x, 0, position.y) + spawnPositionOffset;
 
-    
-    void SpawnObject(Object obj, Vector2 position, Transform roomParent)
-    {
-        
+        // Checks if can spawn
+        bool canSpawn = true;
+
+        // Checks if position in door position
+        foreach (Vector3 doorPosition in doorPositions)
+        {
+            if (spawnPosition == doorPosition)
+                canSpawn = false;
+        }
+
+        // Stops spawn if not able to
+        if (!canSpawn) return;
+
+        Transform newWall = Instantiate(prefabs[obj]);
+        newWall.position = spawnPosition;
+        newWall.localEulerAngles = spawnRotation;
+        newWall.parent = roomParent;
+        objects.Add(newWall);
     }
     
     
@@ -295,13 +268,6 @@ public class DungeonVisualizer : MonoBehaviour
         
         
         
-        
-        
-        
-        
-        
-        
-        
         // Floor
         if (floorFillType == FloorFillType.Simple)
         {
@@ -351,41 +317,10 @@ public class DungeonVisualizer : MonoBehaviour
                         // Instantiate floor
                         Transform instance = Instantiate(prefabs[Object.Floor]);
                         Vector3 position = new Vector3(edgeNode.x + .5f, 0, edgeNode.y + .5f);
-                        // Vector3 position = new Vector3(node.x + .5f, 0, node.y + .5f);
                         instance.position = position;
                     }
                 }
             }
-
-            /*
-            foreach (RectInt door in generator.doors)
-            {
-                // Instantiate floor
-                Transform instance = Instantiate(prefabs[Object.Floor]);
-                        
-                Vector3 position = new Vector3(door.x + door.width/2, 0, door.y + door.height/2);
-                position += new Vector3(-.5f, 0, -.5f);
-                        
-                instance.position = position;
-                instance.localScale = new Vector3(door.width, 1, door.height);
-            }
-            
-            
-            
-            
-            
-            foreach (RectInt room in generator.dungeon.GetNodes())
-            {
-                Vector3 roomPos = new Vector3(room.x + room.width / 2, Time.deltaTime, room.y + room.height / 2);
-                DebugExtension.DebugCircle(roomPos, Color.green, 3, Time.deltaTime, false);
-
-                foreach (RectInt neighbor in generator.dungeon.GetNeighbors(room))
-                {
-                    Vector3 neighborPos = new Vector3(neighbor.x + neighbor.width / 2, 0, neighbor.y + neighbor.height / 2);
-                    Debug.DrawLine(roomPos, neighborPos, Color.green, Time.deltaTime, false);
-                }
-            }
-            */
         }
     }
 }
